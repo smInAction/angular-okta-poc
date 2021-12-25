@@ -4,7 +4,7 @@ const USE_INTERACTION_CODE = process.env.USE_INTERACTION_CODE || false;
 export default {
   oidc: {
     clientId: '0oa2o1eskh3FnX8XZ5d7',
-    issuer: 'https://dev-76512594.okta.com/oauth2/default',
+    issuer: 'http://18.209.113.131/oauth2/default',
     redirectUri: 'https://angular-okta-poc.eastus.cloudapp.azure.com/login/callback',
     scopes: ['openid', 'profile', 'email'],
     testing: {
