@@ -1,0 +1,58 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: angular-okta-poc-deploy
+  labels:
+    app: angular-okta-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular-okta-poc
+  template:
+    metadata:
+      labels:
+        app: angular-okta-poc
+    spec:
+      containers:
+        - name: angular-okta-poc
+          image: "smregistry1.azurecr.io/angular-okta-poc"
+          ports:
+          - containerPort: 80   
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: angular-okta-poc-svc
+    labels:
+      app: angular-okta-poc
+spec:
+    type: ClusterIP
+    ports:
+      - port: 80
+        targetPort: 80
+    selector:
+        app: angular-okta-poc
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: angular-okta-poc-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+  - hosts:
+    - angular-okta-poc.eastus.cloudapp.azure.com
+    secretName: aks-ingress-tls
+  rules:
+  - host: angular-okta-poc.eastus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service: 
+            name: angular-okta-poc
+            port: 
+              number: 80
