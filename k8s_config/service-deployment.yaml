@@ -56,25 +56,3 @@ spec:
             name: angular-okta-poc
             port: 
               number: 80
----
-  kind: "Endpoints"
-  apiVersion: "v1"
-  metadata:
-    name: "external-okta-svc" 
-  subsets: 
-    - addresses:
-        - ip: "18.209.113.131" #The IP Address of the external web server
-      ports:
-        - port: 80 
-          name: "okta"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: external-okta-svc #<------ Should match the name of Endpoints object
-spec:
-  ports:
-    - name: "okta"
-      protocol: TCP
-      port: 80
-      targetPort: 80
