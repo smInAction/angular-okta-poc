@@ -42,14 +42,14 @@ spec:
   host: angular-okta-poc.eastus.cloudapp.azure.com
   tls:
     secret: aks-ingress-tls
+  policies:
+    - name: oidc-policy  
   upstreams:
   - name: angular-okta-poc
     service: angular-okta-poc-svc
     port: 80
   routes:
   - path: /
-    policies:
-    - name: oidc-policy
     action:
       proxy: 
         upstream: angular-okta-poc
