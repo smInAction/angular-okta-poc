@@ -39,7 +39,7 @@ kind: Deployment
 metadata:
   labels:
     k8s-app: oauth2-proxy
-  name: oauth2-proxy
+  name: oauth2-proxy-deploy
 spec:
   replicas: 1
   selector:
@@ -81,7 +81,7 @@ kind: Service
 metadata:
   labels:
     k8s-app: oauth2-proxy
-  name: oauth2-proxy
+  name: oauth2-proxy-svc
 spec:
   ports:
   - name: http
@@ -117,7 +117,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: oauth2-proxy
+  name: oauth2-proxy-ingress
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffer-size: 8k  
 spec:
@@ -130,7 +130,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: oauth2-proxy
+            name: oauth2-proxy-svc
             port:
               number: 4180
   tls:
