@@ -45,6 +45,8 @@ spec:
   - hosts:
     - angular-okta-poc.eastus.cloudapp.azure.com
     secretName: aks-ingress-tls
+  policies:
+  - name: oidc-policy  
   rules:
   - host: angular-okta-poc.eastus.cloudapp.azure.com
     http:
