@@ -34,42 +34,103 @@ spec:
     selector:
         app: angular-okta-poc
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        k8s-app: oauth2-proxy
+    spec:
+      containers:
+      - args:
+        - --provider=okta
+        - --email-domain=*
+        - --upstream=file:///dev/null
+        - --http-address=0.0.0.0:4180
+        # Register a new application
+        # https://github.com/settings/applications/new
+        env:
+        - name: OAUTH2_PROXY_CLIENT_ID
+          value: 0oa2o1eskh3FnX8XZ5d7
+        # docker run -ti --rm python:3-alpine python -c 'import secrets,base64; print(base64.b64encode(base64.b64encode(secrets.token_bytes(16))));'
+        - name: OAUTH2_PROXY_COOKIE_SECRET
+          value: luFL4MwuchIOIHW1bwH1+Q==
+        image: quay.io/oauth2-proxy/oauth2-proxy:latest
+        imagePullPolicy: Always
+        name: oauth2-proxy
+        ports:
+        - containerPort: 4180
+          protocol: TCP
+---
 apiVersion: v1
-kind: Secret
+kind: Service
 metadata:
-  name: oidc-secret
-type: nginx.org/oidc
-data:
-  client-secret: base64-encoded-value-of-client-secret        
----
-apiVersion: k8s.nginx.org/v1
-kind: Policy
-metadata:
-  name: oidc-policy
+  labels:
+    k8s-app: oauth2-proxy
+  name: oauth2-proxy
 spec:
-  oidc:
-    clientID: 0oa2o1eskh3FnX8XZ5d7
-    clientSecret: oidc-secret
-    authEndpoint: https://dev-76512594.okta.com/oauth2/v1/authorize
-    tokenEndpoint: https://dev-76512594.okta.com/oauth2/v1/token
-    jwksURI: https://dev-76512594.okta.com/oauth2/v1/keys
+  ports:
+  - name: http
+    port: 4180
+    protocol: TCP
+    targetPort: 4180
+  selector:
+    k8s-app: oauth2-proxy
 ---
-apiVersion: k8s.nginx.org/v1
-kind: VirtualServer
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: angular-okta-ingress
+  name: angular-okta-poc-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
 spec:
-  host: angular-okta-poc.eastus.cloudapp.azure.com
+  ingressClassName: nginx
   tls:
-    secret: aks-ingress-tls
-  upstreams:
-  - name: angular-okta-poc
-    service: angular-okta-poc-svc
-    port: 80
-  routes:
-  - path: /
-    policies:
-    - name: oidc-policy
-    action:
-      proxy: 
-        upstream: angular-okta-poc
+  - hosts:
+    - angular-okta-poc.eastus.cloudapp.azure.com
+    secretName: aks-ingress-tls  
+  rules:
+  - host: angular-okta-poc.eastus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+		policies:
+        - name: oidc-policy
+        backend:
+          service: 
+            name: angular-okta-poc
+            port: 
+              number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: oauth2-proxy
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: angular-okta-poc.eastus.cloudapp.azure.com
+    http:
+      paths:
+      - path: /oauth2
+        pathType: Prefix
+        backend:
+          service:
+            name: oauth2-proxy
+            port:
+              number: 4180
+  tls:
+  - hosts:
+    - angular-okta-poc.eastus.cloudapp.azure.com
+    secretName: aks-ingress-tls
