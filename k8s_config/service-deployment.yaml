@@ -54,11 +54,13 @@ spec:
       - args:
         - --provider=okta
         - --email-domain=*
-        - --upstream=file:///dev/null
+        - --upstream=https://angular-okta-poc.eastus.cloudapp.azure.com
         - --http-address=0.0.0.0:4180
         - --redirect_url=https://angular-okta-poc.eastus.cloudapp.azure.com/login/callback
-        - --oidc_issuer_url=https://dev-76512594.okta.com
+        - --oidc_issuer_url=https://dev-76512594.okta.com/oauth2/default
         - --set-authorization-header=true
+        - --pass_access_token=true
+        
         # Register a new application
         # https://github.com/settings/applications/new
         env:
