@@ -56,6 +56,8 @@ spec:
         - --email-domain=*
         - --upstream=file:///dev/null
         - --http-address=0.0.0.0:4180
+        - --redirect_url=https://angular-okta-poc.eastus.cloudapp.azure.com/login/callback
+        - --oidc_issuer_url=https://dev-76512594.okta.com
         # Register a new application
         # https://github.com/settings/applications/new
         env:
@@ -91,8 +93,8 @@ kind: Ingress
 metadata:
   name: angular-okta-poc-ingress
   annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://angular-okta-poc.eastus.cloudapp.azure.com/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://angular-okta-poc.eastus.cloudapp.azure.com/oauth2/start?rd=$escaped_request_uri"
 spec:
   ingressClassName: nginx
   tls:
@@ -105,8 +107,6 @@ spec:
       paths:
       - path: /
         pathType: Prefix
-		policies:
-      - name: oidc-policy
         backend:
           service: 
             name: angular-okta-poc
