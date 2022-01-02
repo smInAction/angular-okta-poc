@@ -34,27 +34,22 @@ spec:
     selector:
         app: angular-okta-poc
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
 metadata:
-  name: angular-okta-poc-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
+  name: angular-okta-ingress
 spec:
+  host: angular-okta-poc.eastus.cloudapp.azure.com
   tls:
-  - hosts:
-    - angular-okta-poc.eastus.cloudapp.azure.com
-    secretName: aks-ingress-tls
-  policies:
-  - name: oidc-policy  
-  rules:
-  - host: angular-okta-poc.eastus.cloudapp.azure.com
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service: 
-            name: angular-okta-poc
-            port: 
-              number: 80
+    secret: aks-ingress-tls
+  upstreams:
+  - name: angular-okta-poc
+    service: angular-okta-poc-svc
+    port: 80
+  routes:
+  - path: /
+    policies:
+    - name: oidc-policy
+    action:
+      proxy: 
+        upstream: angular-okta-poc
