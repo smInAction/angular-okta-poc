@@ -64,8 +64,6 @@ jobs:
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            k8s_config/clilent-secret.yaml,
-            k8s_config/oidc.yaml,
             k8s_config/service-deployment.yaml
           images: |
             ${{ env.REGISTRY_NAME }}.azurecr.io/images/${{ env.APP_NAME }}:latest
