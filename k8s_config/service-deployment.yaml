@@ -34,6 +34,26 @@ spec:
     selector:
         app: angular-okta-poc
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: oidc-secret
+type: nginx.org/oidc
+data:
+  client-secret: base64-encoded-value-of-client-secret        
+---
+apiVersion: k8s.nginx.org/v1
+kind: Policy
+metadata:
+  name: oidc-policy
+spec:
+  oidc:
+    clientID: 0oa2o1eskh3FnX8XZ5d7
+    clientSecret: oidc-secret
+    authEndpoint: https://dev-76512594.okta.com/oauth2/v1/authorize
+    tokenEndpoint: https://dev-76512594.okta.com/oauth2/v1/token
+    jwksURI: https://dev-76512594.okta.com/oauth2/v1/keys
+---
 apiVersion: k8s.nginx.org/v1
 kind: VirtualServer
 metadata:
@@ -42,14 +62,14 @@ spec:
   host: angular-okta-poc.eastus.cloudapp.azure.com
   tls:
     secret: aks-ingress-tls
-  policies:
-    - name: oidc-policy  
   upstreams:
   - name: angular-okta-poc
     service: angular-okta-poc-svc
     port: 80
   routes:
   - path: /
+    policies:
+    - name: oidc-policy
     action:
       proxy: 
         upstream: angular-okta-poc
