@@ -106,7 +106,7 @@ spec:
       - path: /
         pathType: Prefix
 		policies:
-        - name: oidc-policy
+      - name: oidc-policy
         backend:
           service: 
             name: angular-okta-poc
