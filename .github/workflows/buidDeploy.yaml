@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_NAME: smregistry1
+  REGISTRY_NAME: smregistry
   CLUSTER_NAME: sm_k8s_cluster
   CLUSTER_RESOURCE_GROUP: sm_resources
   NAMESPACE: ingress-basic
