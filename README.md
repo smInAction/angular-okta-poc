@@ -1,4 +1,4 @@
-# Okta Angular + Custom Login Example
+# Okta Angular + Custom Login Example#
 
 This example shows you how to use the [Okta Angular Library][] to login a user to an Angular application.  The login is achieved with the [Okta Sign In Widget][], which gives you more control to customize the login experience within your app.
 
