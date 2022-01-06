@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: "smk8scluster3-0781"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "smk8scluster3-0781"
+  template:
+    metadata:
+      labels:
+        app: "smk8scluster3-0781"
+    spec:
+      containers:
+        - name: "smk8scluster3-0781"
+          image: "smregistry2.azurecr.io/smk8scluster3"
+          ports:
+          - containerPort: 80
