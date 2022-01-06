@@ -10,11 +10,11 @@ on:
 
 env:
   REGISTRY_NAME: smregistry2
-  CLUSTER_NAME: sm_k8s_cluster
+  CLUSTER_NAME: sm_k8s_cluster2
   CLUSTER_RESOURCE_GROUP: sm_resources
   NAMESPACE: ingress-basic
   APP_NAME: angular-okta-poc
-  SECRET: sm-secret
+  SECRET: sm-secret1
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -64,7 +64,7 @@ jobs:
       - uses: azure/k8s-deploy@v1
         with:
           manifests: |
-            k8s_config/service-deployment.yaml
+            service-deployment.yaml
           images: |
             ${{ env.REGISTRY_NAME }}.azurecr.io/images/${{ env.APP_NAME }}:latest
           imagepullsecrets: |
