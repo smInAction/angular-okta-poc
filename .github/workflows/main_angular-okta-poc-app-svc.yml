@@ -50,6 +50,5 @@ jobs:
         id: deploy-to-webapp
         with:
           app-name: 'angular-okta-poc-app-svc'
-          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B36353827FF340E5B479F8962E1736A5 }}
-          package: .
+          package: ./dist/angular-okta-poc
