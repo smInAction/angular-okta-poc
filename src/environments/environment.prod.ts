@@ -12,7 +12,7 @@
 
 export const environment = {
   production: true,
-  appBaseHref: '/custom-login/',
+  appBaseHref: '/angular-okta-poc/',
   ISSUER: 'https://dev-76512594.okta.com/oauth2/default',
   CLIENT_ID: '0oa2o1eskh3FnX8XZ5d7'
 };

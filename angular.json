@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "custom-login": {
+    "angular-okta-poc": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -23,7 +23,7 @@
             "customWebpackConfig": {
               "path": "extra-webpack.config.js"
             },
-            "outputPath": "dist/custom-login",
+            "outputPath": "dist/angular-okta-poc",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -61,19 +61,19 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "custom-login:build",
+            "browserTarget": "angular-okta-poc:build",
             "port": 8080
           },
           "configurations": {
             "production": {
-              "browserTarget": "custom-login:build:production"
+              "browserTarget": "angular-okta-poc:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "custom-login:build"
+            "browserTarget": "angular-okta-poc:build"
           }
         },
         "test": {
@@ -111,5 +111,5 @@
       }
     }
   },
-  "defaultProject": "custom-login"
+  "defaultProject": "angular-okta-poc"
 }
