@@ -10,7 +10,7 @@ on:
 
 env:
   REGISTRY_NAME: smregistry2
-  CLUSTER_NAME: sm_k8s_cluster3
+  CLUSTER_NAME: sm_k8s_cluster4
   CLUSTER_RESOURCE_GROUP: sm_resources
   NAMESPACE: ingress-basic
   APP_NAME: angular-okta-poc
